@@ -1,507 +1,1042 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Future Frontier – Education Center</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --neon: #00f0ff; --neon2: #7b5cfa; --dark: #050a14;
-    --dark2: #0a1628; --dark3: #0f2040;
-    --text: #e8f4ff; --muted: #7a9abf; --accent: #f0c040;
-  }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Exo 2', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
-  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background: radial-gradient(ellipse at 50% 0%, #0a1e3a 0%, #050a14 70%); }
-  .star { position: absolute; border-radius: 50%; background: white;
-    animation: twinkle var(--dur) ease-in-out infinite alternate; }
-  @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
-  .grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0;
-    background-image: linear-gradient(rgba(0,240,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,240,255,0.04) 1px, transparent 1px);
-    background-size: 60px 60px; }
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 4rem; background: rgba(5,10,20,0.85);
-    backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,240,255,0.12); }
-  .logo { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.25rem;
-    color: var(--neon); letter-spacing: 2px; text-shadow: 0 0 20px rgba(0,240,255,0.5); }
-  .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem;
-    letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--neon); }
-  .nav-btn { background: transparent; border: 1px solid var(--neon); color: var(--neon);
-    padding: 0.5rem 1.4rem; border-radius: 4px; font-family: 'Exo 2', sans-serif;
-    font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
-    text-transform: uppercase; }
-  .nav-btn:hover { background: var(--neon); color: var(--dark); }
-  section { position: relative; z-index: 1; }
-  .hero { min-height: 100vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center; padding: 8rem 2rem 4rem; }
-  .hero-badge { display: inline-block; background: rgba(0,240,255,0.08);
-    border: 1px solid rgba(0,240,255,0.3); color: var(--neon); font-size: 0.75rem;
-    letter-spacing: 3px; text-transform: uppercase; padding: 0.4rem 1.2rem;
-    border-radius: 20px; margin-bottom: 2rem;
-    animation: pulse-badge 2s ease-in-out infinite; }
-  @keyframes pulse-badge {
-    0%,100% { box-shadow: 0 0 0 0 rgba(0,240,255,0.2); }
-    50% { box-shadow: 0 0 0 8px rgba(0,240,255,0); } }
-  .hero h1 { font-family: 'Orbitron', monospace; font-weight: 900;
-    font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; margin-bottom: 0.3em;
-    text-shadow: 0 0 40px rgba(0,240,255,0.3); }
-  .hero h1 .line2 { color: var(--neon); display: block; text-shadow: 0 0 60px rgba(0,240,255,0.6); }
-  .hero p { max-width: 580px; font-size: 1.1rem; color: var(--muted);
-    line-height: 1.8; margin: 1.5rem auto 2.5rem; font-weight: 300; }
-  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .btn-primary { background: linear-gradient(135deg, var(--neon), var(--neon2));
-    color: var(--dark); font-family: 'Exo 2', sans-serif; font-weight: 600;
-    font-size: 0.9rem; padding: 0.8rem 2.2rem; border: none; border-radius: 4px;
-    cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-    transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; display: inline-block; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,240,255,0.35); }
-  .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2);
-    color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 0.9rem;
-    padding: 0.8rem 2.2rem; border-radius: 4px; cursor: pointer;
-    text-transform: uppercase; letter-spacing: 1px;
-    transition: border-color 0.2s, color 0.2s; text-decoration: none; display: inline-block; }
-  .btn-secondary:hover { border-color: var(--neon); color: var(--neon); }
-  .stats { display: flex; justify-content: center; flex-wrap: wrap;
-    gap: 0; margin-top: 5rem; border: 1px solid rgba(0,240,255,0.12);
-    border-radius: 8px; overflow: hidden; background: rgba(10,22,40,0.6);
-    max-width: 700px; width: 100%; margin-left: auto; margin-right: auto; }
-  .stat { flex: 1; min-width: 140px; padding: 1.5rem 1rem; text-align: center; position: relative; }
-  .stat + .stat::before { content: ''; position: absolute; left: 0; top: 20%; height: 60%;
-    width: 1px; background: rgba(0,240,255,0.12); }
-  .stat-num { font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 700;
-    color: var(--neon); text-shadow: 0 0 20px rgba(0,240,255,0.4); }
-  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px;
-    text-transform: uppercase; margin-top: 0.3rem; }
-  .section-header { text-align: center; margin-bottom: 3.5rem; }
-  .section-tag { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--neon); margin-bottom: 0.8rem; display: block; }
-  .section-header h2 { font-family: 'Orbitron', monospace;
-    font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; }
-  .section-header p { color: var(--muted); max-width: 500px; margin: 1rem auto 0; line-height: 1.7; }
-  .container { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
-  .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-  .course-card { background: rgba(10,22,40,0.7); border: 1px solid rgba(0,240,255,0.1);
-    border-radius: 8px; padding: 1.75rem; transition: border-color 0.2s, transform 0.2s;
-    position: relative; overflow: hidden; cursor: pointer; }
-  .course-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 2px; background: linear-gradient(90deg, var(--neon), var(--neon2));
-    transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
-  .course-card:hover { border-color: rgba(0,240,255,0.3); transform: translateY(-4px); }
-  .course-card:hover::before { transform: scaleX(1); }
-  .course-icon { width: 48px; height: 48px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; margin-bottom: 1.2rem; background: rgba(0,240,255,0.08);
-    border: 1px solid rgba(0,240,255,0.15); }
-  .course-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.6rem; }
-  .course-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
-  .course-tag { display: inline-block; font-size: 0.7rem; letter-spacing: 1px;
-    text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 3px; border: 1px solid; }
-  .tag-neon { border-color: var(--neon); color: var(--neon); background: rgba(0,240,255,0.05); }
-  .tag-purple { border-color: var(--neon2); color: var(--neon2); background: rgba(123,92,250,0.05); }
-  .tag-gold { border-color: var(--accent); color: var(--accent); background: rgba(240,192,64,0.05); }
-  .enroll-btn { display: inline-block; margin-top: 1rem; font-size: 0.8rem;
-    color: var(--neon); cursor: pointer; background: none; border: none;
-    font-family: 'Exo 2', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-  .enroll-btn:hover { text-decoration: underline; }
-  .why-section { background: rgba(10,22,40,0.4); border-top: 1px solid rgba(0,240,255,0.06);
-    border-bottom: 1px solid rgba(0,240,255,0.06); }
-  .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
-  .why-card { text-align: center; padding: 1.5rem 1rem; }
-  .why-num { font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900;
-    background: linear-gradient(135deg, var(--neon), var(--neon2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
-  .why-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
-  .why-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-  .testi-card { background: rgba(10,22,40,0.7); border: 1px solid rgba(0,240,255,0.1);
-    border-radius: 8px; padding: 1.75rem; }
-  .stars { color: var(--accent); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
-  .testi-card p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; font-style: italic; }
-  .testi-author { display: flex; align-items: center; gap: 0.8rem; }
-  .avatar { width: 38px; height: 38px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.85rem;
-    background: linear-gradient(135deg, var(--neon), var(--neon2)); color: var(--dark); }
-  .testi-author span { font-size: 0.85rem; font-weight: 600; display: block; }
-  .testi-author small { font-size: 0.75rem; color: var(--muted); }
-  .cta-section { text-align: center; padding: 6rem 2rem; }
-  .cta-box { max-width: 680px; margin: 0 auto; background: rgba(10,22,40,0.8);
-    border: 1px solid rgba(0,240,255,0.2); border-radius: 12px; padding: 3.5rem 2.5rem;
-    position: relative; overflow: hidden; }
-  .cta-box::before { content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.06) 0%, transparent 70%);
-    pointer-events: none; }
-  .cta-box h2 { font-family: 'Orbitron', monospace; font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1rem; }
-  .cta-box > p { color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
-  .enroll-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
-  .enroll-form input, .enroll-form select {
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(0,240,255,0.2);
-    color: var(--text); padding: 0.75rem 1.2rem; border-radius: 4px;
-    font-family: 'Exo 2', sans-serif; font-size: 0.9rem; outline: none;
-    transition: border-color 0.2s; }
-  .enroll-form input { width: 200px; }
-  .enroll-form select { width: 200px; cursor: pointer; }
-  .enroll-form select option { background: var(--dark2); color: var(--text); }
-  .enroll-form input::placeholder { color: var(--muted); }
-  .enroll-form input:focus, .enroll-form select:focus { border-color: var(--neon); }
-  .form-msg { font-size: 0.88rem; margin-top: 0.8rem; min-height: 1.4em; transition: all 0.3s; }
-  .form-msg.success { color: #00f0b0; }
-  .form-msg.error { color: #ff6b6b; }
-  footer { border-top: 1px solid rgba(0,240,255,0.08); padding: 2.5rem 4rem;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 1rem; font-size: 0.82rem; color: var(--muted); }
-  .footer-logo { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.9rem; color: var(--neon); }
-  .footer-links { display: flex; gap: 1.5rem; }
-  .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--neon); }
-  .scanline { position: fixed; inset: 0; pointer-events: none; z-index: 200;
-    background: repeating-linear-gradient(0deg, transparent, transparent 3px,
-      rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px); }
 
-  /* Modal */
-  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 300;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-    align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--dark2); border: 1px solid rgba(0,240,255,0.25);
-    border-radius: 12px; padding: 2.5rem; max-width: 420px; width: 90%;
-    position: relative; }
-  .modal h3 { font-family: 'Orbitron', monospace; color: var(--neon); margin-bottom: 1.5rem; font-size: 1.1rem; }
-  .modal label { font-size: 0.8rem; color: var(--muted); letter-spacing: 1px;
-    text-transform: uppercase; display: block; margin-bottom: 0.4rem; margin-top: 1rem; }
-  .modal input, .modal select, .modal textarea {
-    width: 100%; background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(0,240,255,0.2); color: var(--text);
-    padding: 0.7rem 1rem; border-radius: 4px; font-family: 'Exo 2', sans-serif;
-    font-size: 0.9rem; outline: none; resize: vertical; }
-  .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: var(--neon); }
-  .modal select option { background: var(--dark2); }
-  .modal-close { position: absolute; top: 1rem; right: 1rem; background: none;
-    border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; line-height: 1; }
-  .modal-close:hover { color: var(--neon); }
-  .modal-btns { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
-  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid transparent;
-    border-top-color: var(--dark); border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: middle; margin-right: 6px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-</style>
+  <!-- =====================================================
+       META TAGS — Page ka basic setup
+       charset = Urdu/Arabic characters ke liye UTF-8
+       viewport = Mobile par sahi size dikhane ke liye
+  ====================================================== -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Future Frontier – Education Center</title>
+
+  <!-- =====================================================
+       GOOGLE FONTS — Special fonts load karna
+       Orbitron  = Headings ke liye futuristic font
+       Exo 2     = Body text ke liye clean font
+  ====================================================== -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    /* =====================================================
+       RESET & ROOT VARIABLES
+       * = Har element ki margin/padding zero karna
+       :root = Poore page mein use hone wale colors define karna
+    ====================================================== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --neon: #00f0ff;       /* Roshan cyan color */
+      --neon2: #7b5cfa;      /* Purple color */
+      --dark: #050a14;       /* Sabse gehri background */
+      --dark2: #0a1628;      /* Thodi halki dark background */
+      --dark3: #0f2040;      /* Medium dark background */
+      --text: #e8f4ff;       /* Safed numaya text */
+      --muted: #7a9abf;      /* Dheema text (descriptions) */
+      --accent: #f0c040;     /* Golden/yellow accent color */
+    }
+
+    /* =====================================================
+       HTML & BODY — Page ka base style
+       scroll-behavior: smooth = Links click karne par
+       smoothly scroll karna
+    ====================================================== */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Exo 2', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow-x: hidden; /* Horizontal scroll band karna */
+    }
+
+    /* =====================================================
+       STARS BACKGROUND
+       position: fixed = Page scroll hone par bhi jagah pe rehna
+       z-index: 0 = Sab se peeche rehna
+       radial-gradient = Neele se kale background ki gradient
+    ====================================================== */
+    #stars {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse at 50% 0%, #0a1e3a 0%, #050a14 70%);
+    }
+    /* Har ek star (chhota dot) ka style */
+    .star {
+      position: absolute; border-radius: 50%; background: white;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+    /* Stars ki flickering animation */
+    @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
+
+    /* =====================================================
+       GRID BACKGROUND
+       Peeche dikhne wali cyan colored grid lines
+    ====================================================== */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,240,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* =====================================================
+       NAVIGATION BAR
+       position: fixed = Scroll karne par bhi upar rehna
+       backdrop-filter: blur = Peeche wala content blur hona
+       border-bottom = Neechey cyan ki patli line
+    ====================================================== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 4rem;
+      background: rgba(5,10,20,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,240,255,0.12);
+    }
+    /* Logo ka style — Orbitron font mein FUTUREFRONTIER */
+    .logo {
+      font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.25rem;
+      color: var(--neon); letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(0,240,255,0.5);
+    }
+    /* Logo ke andar FRONTIER part — golden color mein */
+    .logo span { color: var(--accent); }
+
+    /* Nav links list — horizontal mein dikhana */
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none; font-size: 0.85rem;
+      letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s;
+    }
+    /* Hover par cyan ho jaana */
+    .nav-links a:hover { color: var(--neon); }
+
+    /* "Enroll Now" button nav mein */
+    .nav-btn {
+      background: transparent; border: 1px solid var(--neon); color: var(--neon);
+      padding: 0.5rem 1.4rem; border-radius: 4px;
+      font-family: 'Exo 2', sans-serif; font-size: 0.85rem;
+      letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    /* Hover par background cyan aur text dark ho jaana */
+    .nav-btn:hover { background: var(--neon); color: var(--dark); }
+
+    /* =====================================================
+       SECTION — Sab sections ka base z-index
+       Stars/grid ke upar dikhne ke liye z-index: 1
+    ====================================================== */
+    section { position: relative; z-index: 1; }
+
+    /* =====================================================
+       HERO SECTION
+       min-height: 100vh = Pura screen bhar lena
+       flex column = Items upar se neeche lagana
+       center align = Beech mein rakhnae
+    ====================================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 8rem 2rem 4rem;
+    }
+
+    /* Hero ke upar chhota badge — "Pakistan's #1 ..." */
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0,240,255,0.08);
+      border: 1px solid rgba(0,240,255,0.3);
+      color: var(--neon); font-size: 0.75rem;
+      letter-spacing: 3px; text-transform: uppercase;
+      padding: 0.4rem 1.2rem; border-radius: 20px; margin-bottom: 2rem;
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+    /* Badge ki pulsing glow animation */
+    @keyframes pulse-badge {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,240,255,0.2); }
+      50%      { box-shadow: 0 0 0 8px rgba(0,240,255,0); }
+    }
+
+    /* Hero heading — bada font, responsive size */
+    .hero h1 {
+      font-family: 'Orbitron', monospace; font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1; margin-bottom: 0.3em;
+      text-shadow: 0 0 40px rgba(0,240,255,0.3);
+    }
+    /* "Own the Future." wali line — cyan colored */
+    .hero h1 .line2 {
+      color: var(--neon); display: block;
+      text-shadow: 0 0 60px rgba(0,240,255,0.6);
+    }
+    /* Hero description paragraph */
+    .hero p {
+      max-width: 580px; font-size: 1.1rem; color: var(--muted);
+      line-height: 1.8; margin: 1.5rem auto 2.5rem; font-weight: 300;
+    }
+
+    /* Hero ke do buttons ka container */
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* Primary button — gradient background */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--neon), var(--neon2));
+      color: var(--dark); font-family: 'Exo 2', sans-serif; font-weight: 600;
+      font-size: 0.9rem; padding: 0.8rem 2.2rem; border: none; border-radius: 4px;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,240,255,0.35); }
+
+    /* Secondary button — transparent with border */
+    .btn-secondary {
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text); font-family: 'Exo 2', sans-serif; font-size: 0.9rem;
+      padding: 0.8rem 2.2rem; border-radius: 4px; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 1px;
+      transition: border-color 0.2s, color 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--neon); color: var(--neon); }
+
+    /* =====================================================
+       STATS BAR
+       Hero ke neeche 4 numbers wali strip
+       (1200+ Students, 98% Pass Rate, etc.)
+    ====================================================== */
+    .stats {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 0; margin-top: 5rem;
+      border: 1px solid rgba(0,240,255,0.12);
+      border-radius: 8px; overflow: hidden;
+      background: rgba(10,22,40,0.6);
+      max-width: 700px; width: 100%; margin-left: auto; margin-right: auto;
+    }
+    /* Har ek stat box */
+    .stat { flex: 1; min-width: 140px; padding: 1.5rem 1rem; text-align: center; position: relative; }
+    /* Beech ki divider line (pehle ke ilawa har stat se pehle) */
+    .stat + .stat::before {
+      content: ''; position: absolute; left: 0; top: 20%; height: 60%;
+      width: 1px; background: rgba(0,240,255,0.12);
+    }
+    /* Badi number — jaise "1,200+" */
+    .stat-num {
+      font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 700;
+      color: var(--neon); text-shadow: 0 0 20px rgba(0,240,255,0.4);
+    }
+    /* Chhota label — jaise "Students" */
+    .stat-label {
+      font-size: 0.75rem; color: var(--muted); letter-spacing: 1px;
+      text-transform: uppercase; margin-top: 0.3rem;
+    }
+
+    /* =====================================================
+       SECTION HEADER — Har section ka upar wala title area
+    ====================================================== */
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+    /* Chhota tag — jaise "// What We Teach" */
+    .section-tag {
+      font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--neon); margin-bottom: 0.8rem; display: block;
+    }
+    /* Section heading */
+    .section-header h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700;
+    }
+    /* Section description */
+    .section-header p { color: var(--muted); max-width: 500px; margin: 1rem auto 0; line-height: 1.7; }
+
+    /* =====================================================
+       CONTAINER — Content ko center mein rakhne ke liye
+       max-width aur auto margin se centering
+    ====================================================== */
+    .container { max-width: 1100px; margin: 0 auto; padding: 5rem 2rem; }
+
+    /* =====================================================
+       COURSES GRID — Course cards ka responsive grid
+       auto-fit = Khud column count set karta hai
+       minmax(280px, 1fr) = Min 280px, max equal share
+    ====================================================== */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Har ek course card */
+    .course-card {
+      background: rgba(10,22,40,0.7);
+      border: 1px solid rgba(0,240,255,0.1);
+      border-radius: 8px; padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative; overflow: hidden; cursor: pointer;
+    }
+    /* Card ke upar glowing line — hover par dikhti hai */
+    .course-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--neon), var(--neon2));
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    /* Hover effect — upar uthna aur border roshan hona */
+    .course-card:hover { border-color: rgba(0,240,255,0.3); transform: translateY(-4px); }
+    .course-card:hover::before { transform: scaleX(1); }
+
+    /* Course ka icon box (emoji ke saath) */
+    .course-icon {
+      width: 48px; height: 48px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.2rem;
+      background: rgba(0,240,255,0.08);
+      border: 1px solid rgba(0,240,255,0.15);
+    }
+    /* Course card title */
+    .course-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.6rem; }
+    /* Course card description */
+    .course-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.2rem; }
+
+    /* =====================================================
+       COURSE TAGS — Chhote colored badges
+       jaise "Matric · FSc", "Pre-Medical", "Intensive"
+    ====================================================== */
+    .course-tag {
+      display: inline-block; font-size: 0.7rem; letter-spacing: 1px;
+      text-transform: uppercase; padding: 0.25rem 0.7rem;
+      border-radius: 3px; border: 1px solid;
+    }
+    .tag-neon   { border-color: var(--neon);   color: var(--neon);   background: rgba(0,240,255,0.05); }
+    .tag-purple { border-color: var(--neon2);  color: var(--neon2);  background: rgba(123,92,250,0.05); }
+    .tag-gold   { border-color: var(--accent); color: var(--accent); background: rgba(240,192,64,0.05); }
+
+    /* "+ Enroll in this course" button */
+    .enroll-btn {
+      display: inline-block; margin-top: 1rem; font-size: 0.8rem;
+      color: var(--neon); cursor: pointer; background: none; border: none;
+      font-family: 'Exo 2', sans-serif; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .enroll-btn:hover { text-decoration: underline; }
+
+    /* =====================================================
+       WHY US SECTION — "Built Different" section ka background
+    ====================================================== */
+    .why-section {
+      background: rgba(10,22,40,0.4);
+      border-top: 1px solid rgba(0,240,255,0.06);
+      border-bottom: 1px solid rgba(0,240,255,0.06);
+    }
+    /* Why cards ka grid */
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+
+    /* Har ek why card */
+    .why-card { text-align: center; padding: 1.5rem 1rem; }
+    /* Bada number — "01", "02", etc. */
+    .why-num {
+      font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--neon), var(--neon2));
+        background-clip: text;
+        -webkit-background-clip: text; /* Safari/older browsers */
+        -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .why-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .why-card p  { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+    /* =====================================================
+       TESTIMONIALS — Student reviews cards
+    ====================================================== */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    /* Har ek testimonial card */
+    .testi-card {
+      background: rgba(10,22,40,0.7);
+      border: 1px solid rgba(0,240,255,0.1);
+      border-radius: 8px; padding: 1.75rem;
+    }
+    /* Stars rating — golden stars */
+    .stars { color: var(--accent); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    /* Review text — italic aur muted color */
+    .testi-card p { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; font-style: italic; }
+    /* Student name aur role wala section */
+    .testi-author { display: flex; align-items: center; gap: 0.8rem; }
+    /* Student initials circle */
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+      background: linear-gradient(135deg, var(--neon), var(--neon2));
+      color: var(--dark);
+    }
+    .testi-author span  { font-size: 0.85rem; font-weight: 600; display: block; }
+    .testi-author small { font-size: 0.75rem; color: var(--muted); }
+
+    /* =====================================================
+       CTA / ENROLL SECTION — Neeche enrollment form wali section
+    ====================================================== */
+    .cta-section { text-align: center; padding: 6rem 2rem; }
+    /* Beech wala glowing box */
+    .cta-box {
+      max-width: 680px; margin: 0 auto;
+      background: rgba(10,22,40,0.8);
+      border: 1px solid rgba(0,240,255,0.2);
+      border-radius: 12px; padding: 3.5rem 2.5rem;
+      position: relative; overflow: hidden;
+    }
+    /* CTA box ke andar glow effect */
+    .cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box h2 { font-family: 'Orbitron', monospace; font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1rem; }
+    .cta-box > p { color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
+
+    /* Enrollment form — name, phone, course, button */
+    .enroll-form {
+      display: flex; gap: 0.75rem; justify-content: center;
+      flex-wrap: wrap; margin-bottom: 1rem;
+    }
+    /* Form ke inputs aur select ka style */
+    .enroll-form input,
+    .enroll-form select {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,240,255,0.2);
+      color: var(--text); padding: 0.75rem 1.2rem; border-radius: 4px;
+      font-family: 'Exo 2', sans-serif; font-size: 0.9rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .enroll-form input  { width: 200px; }
+    .enroll-form select { width: 200px; cursor: pointer; }
+    .enroll-form select option { background: var(--dark2); color: var(--text); }
+    .enroll-form input::placeholder { color: var(--muted); }
+    /* Focus par cyan border */
+    .enroll-form input:focus,
+    .enroll-form select:focus { border-color: var(--neon); }
+
+    /* Form ke neeche success/error message */
+    .form-msg {
+      font-size: 0.88rem; margin-top: 0.8rem;
+      min-height: 1.4em; transition: all 0.3s;
+    }
+    .form-msg.success { color: #00f0b0; }  /* Kamyabi — green */
+    .form-msg.error   { color: #ff6b6b; }  /* Error — red */
+
+    /* =====================================================
+       FOOTER — Page ke bilkul neeche
+    ====================================================== */
+    footer {
+      border-top: 1px solid rgba(0,240,255,0.08);
+      padding: 2.5rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    /* Footer logo */
+    .footer-logo { font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.9rem; color: var(--neon); }
+    /* Footer links */
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--neon); }
+
+    /* =====================================================
+       SCANLINE EFFECT
+       Purane CRT monitor jaisi horizontal lines ka overlay
+       Purely decorative — visual style ke liye
+    ====================================================== */
+    .scanline {
+      position: fixed; inset: 0; pointer-events: none; z-index: 200;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,0,0,0.02) 3px, rgba(0,0,0,0.02) 4px
+      );
+    }
+
+    /* =====================================================
+       ENROLLMENT MODAL — Pop-up form
+       display: none = Default mein chhupa hua
+       .open class lagane par dikhta hai
+    ====================================================== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }  /* Modal khulne par */
+
+    /* Modal ka andar wala box */
+    .modal {
+      background: var(--dark2);
+      border: 1px solid rgba(0,240,255,0.25);
+      border-radius: 12px; padding: 2.5rem;
+      max-width: 420px; width: 90%;
+      position: relative;
+    }
+    /* Modal heading */
+    .modal h3 { font-family: 'Orbitron', monospace; color: var(--neon); margin-bottom: 1.5rem; font-size: 1.1rem; }
+    /* Modal form labels */
+    .modal label {
+      font-size: 0.8rem; color: var(--muted); letter-spacing: 1px;
+      text-transform: uppercase; display: block;
+      margin-bottom: 0.4rem; margin-top: 1rem;
+    }
+    /* Modal form inputs */
+    .modal input, .modal select, .modal textarea {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,240,255,0.2); color: var(--text);
+      padding: 0.7rem 1rem; border-radius: 4px;
+      font-family: 'Exo 2', sans-serif; font-size: 0.9rem;
+      outline: none; resize: vertical;
+    }
+    .modal input:focus, .modal select:focus, .modal textarea:focus { border-color: var(--neon); }
+    .modal select option { background: var(--dark2); }
+    /* "✕" band karne ka button */
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.4rem; cursor: pointer; line-height: 1;
+    }
+    .modal-close:hover { color: var(--neon); }
+    /* Modal ke submit/cancel buttons */
+    .modal-btns { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+
+    /* =====================================================
+       SPINNER — Loading animation
+       Button click karne par dikhne wala ghoomta circle
+    ====================================================== */
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid transparent;
+      border-top-color: var(--dark);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+  </style>
 </head>
 <body>
 
-<div id="stars"></div>
-<div class="grid-bg"></div>
-<div class="scanline"></div>
+  <!-- =====================================================
+       BACKGROUND LAYERS
+       1. #stars     = Twinkling dots JavaScript se banaye jaate hain
+       2. .grid-bg   = CSS se bani cyan grid lines
+       3. .scanline  = CRT effect overlay
+  ====================================================== -->
+  <div id="stars"></div>
+  <div class="grid-bg"></div>
+  <div class="scanline"></div>
 
-<!-- ENROLL MODAL -->
-<div class="modal-overlay" id="enrollModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3>📋 Free Trial Book Karein</h3>
-    <label>Aapka Naam</label>
-    <input type="text" id="m-name" placeholder="Jaise: Ali Hassan" />
-    <label>Phone Number</label>
-    <input type="tel" id="m-phone" placeholder="03XX-XXXXXXX" />
-    <label>Course (Optional)</label>
-    <select id="m-course">
-      <option value="General">General Inquiry</option>
-      <option value="Mathematics & Science">Mathematics & Science</option>
-      <option value="Computer Science & IT">Computer Science & IT</option>
-      <option value="English Language">English Language</option>
-      <option value="Biology & Chemistry">Biology & Chemistry</option>
-      <option value="Business & Economics">Business & Economics</option>
-      <option value="Entry Test Prep">Entry Test Prep (MDCAT/ECAT)</option>
-    </select>
-    <div class="modal-btns">
-      <button class="btn-primary" id="modalSubmitBtn" onclick="submitEnroll()">Book Free Trial →</button>
-      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
-    </div>
-    <div class="form-msg" id="modal-msg"></div>
-  </div>
-</div>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">FUTURE<span>FRONTIER</span></div>
-  <ul class="nav-links">
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#why">About</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="nav-btn" onclick="openModal()">Enroll Now</button>
-</nav>
+  <!-- =====================================================
+       ENROLLMENT MODAL (POP-UP)
+       Yeh normally chhupa rehta hai.
+       openModal() function call hone par dikhta hai.
+       Bahar click karne par band hota hai.
+  ====================================================== -->
+  <div class="modal-overlay" id="enrollModal">
+    <div class="modal">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge">🚀 Pakistan's #1 Futuristic Learning Center</div>
-  <h1>Shape Your Mind,<span class="line2">Own the Future.</span></h1>
-  <p>Future Frontier is where ambitious students discover the knowledge and skills to lead tomorrow. World-class teaching. Cutting-edge curriculum. Limitless potential.</p>
-  <div class="hero-btns">
-    <a href="#courses" class="btn-primary">Explore Courses</a>
-    <button class="btn-secondary" onclick="openModal()">Book Free Trial</button>
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-num">1,200+</div><div class="stat-label">Students</div></div>
-    <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Pass Rate</div></div>
-    <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Expert Teachers</div></div>
-    <div class="stat"><div class="stat-num">8 Yrs</div><div class="stat-label">Experience</div></div>
-  </div>
-</section>
+      <!-- ✕ Band karne ka button -->
+      <button class="modal-close" onclick="closeModal()">✕</button>
 
-<!-- COURSES -->
-<section id="courses">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">// What We Teach</span>
-      <h2>Our Programs</h2>
-      <p>From foundational subjects to advanced specializations — we prepare students for a world that doesn't exist yet.</p>
-    </div>
-    <div class="courses-grid">
-      <div class="course-card" onclick="openModal('Mathematics & Science')">
-        <div class="course-icon">🔢</div>
-        <h3>Mathematics & Science</h3>
-        <p>From basic algebra to calculus and physics — taught with clarity, depth, and real-world application.</p>
-        <span class="course-tag tag-neon">Matric · FSc</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-      <div class="course-card" onclick="openModal('Computer Science & IT')">
-        <div class="course-icon">💻</div>
-        <h3>Computer Science & IT</h3>
-        <p>Programming, web development, and digital literacy. Prepare for the jobs of the future, starting today.</p>
-        <span class="course-tag tag-purple">All Levels</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-      <div class="course-card" onclick="openModal('English Language')">
-        <div class="course-icon">📖</div>
-        <h3>English Language Mastery</h3>
-        <p>Grammar, comprehension, writing, and spoken English — communication skills that open every door.</p>
-        <span class="course-tag tag-neon">Beginner–Advanced</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-      <div class="course-card" onclick="openModal('Biology & Chemistry')">
-        <div class="course-icon">🧬</div>
-        <h3>Biology & Chemistry</h3>
-        <p>Concept-based learning with lab practice that builds real understanding — not just exam tricks.</p>
-        <span class="course-tag tag-gold">Pre-Medical</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-      <div class="course-card" onclick="openModal('Business & Economics')">
-        <div class="course-icon">📊</div>
-        <h3>Business & Economics</h3>
-        <p>Accounts, economics, and commerce fundamentals for students aiming for a career in business.</p>
-        <span class="course-tag tag-purple">Commerce</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-      <div class="course-card" onclick="openModal('Entry Test Prep')">
-        <div class="course-icon">🎯</div>
-        <h3>Entry Test Preparation</h3>
-        <p>MDCAT, ECAT, and university entry test prep with proven strategies, mock tests, and expert guidance.</p>
-        <span class="course-tag tag-gold">Intensive</span><br/>
-        <button class="enroll-btn">+ Enroll in this course</button>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- Modal heading -->
+      <h3>📋 Free Trial Book Karein</h3>
 
-<!-- WHY US -->
-<section id="why" class="why-section">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">// Why Future Frontier</span>
-      <h2>Built Different</h2>
-      <p>We don't just teach — we transform. Here's what sets us apart.</p>
-    </div>
-    <div class="why-grid">
-      <div class="why-card"><div class="why-num">01</div><h3>Expert Faculty</h3><p>Each teacher is rigorously selected — qualified, experienced, and passionate about student success.</p></div>
-      <div class="why-card"><div class="why-num">02</div><h3>Small Batch Sizes</h3><p>Maximum attention for every student. No getting lost in a crowd — every question gets answered.</p></div>
-      <div class="why-card"><div class="why-num">03</div><h3>Progress Tracking</h3><p>Regular assessments and detailed parent reports so you always know exactly where your child stands.</p></div>
-      <div class="why-card"><div class="why-num">04</div><h3>Modern Methods</h3><p>Digital tools, visual learning, and concept-based teaching that makes even hard topics feel simple.</p></div>
-    </div>
-  </div>
-</section>
+      <!-- Name input -->
+      <label>Aapka Naam</label>
+      <input type="text" id="m-name" placeholder="Jaise: Ali Hassan" />
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">// Student Stories</span>
-      <h2>What Our Students Say</h2>
-    </div>
-    <div class="testimonials-grid">
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p>"Future Frontier ne meri poori zindagi badal di. Pehle maths se darta tha, ab ECAT mein 90% aaya. Shukria!"</p>
-        <div class="testi-author"><div class="avatar">AK</div><div><span>Ahmed Khan</span><small>ECAT – Engineering Student</small></div></div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p>"The teachers here genuinely care. I failed twice before joining — after 3 months, I topped my class in Biology."</p>
-        <div class="testi-author"><div class="avatar">SR</div><div><span>Sana Raza</span><small>MDCAT – Medical Aspirant</small></div></div>
-      </div>
-      <div class="testi-card">
-        <div class="stars">★★★★★</div>
-        <p>"Computer Science ka course itna practical tha ke mujhe first year mein hi freelancing milne lagi. Amazing!"</p>
-        <div class="testi-author"><div class="avatar">BM</div><div><span>Bilal Mirza</span><small>IT Course Graduate</small></div></div>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- Phone input -->
+      <label>Phone Number</label>
+      <input type="tel" id="m-phone" placeholder="03XX-XXXXXXX" />
 
-<!-- ENROLL / CTA -->
-<section id="contact" class="cta-section">
-  <div class="cta-box">
-    <span class="section-tag">// Start Your Journey</span>
-    <h2>Enroll at Future Frontier</h2>
-    <p>Seats are limited. Secure your place today and take the first step toward a brighter future.</p>
-    <div class="enroll-form">
-      <input type="text"  id="f-name"  placeholder="Your Name" />
-      <input type="tel"   id="f-phone" placeholder="Phone Number" />
-      <select id="f-course">
-        <option value="General">Select Course</option>
+      <!-- Course dropdown — optional selection -->
+      <label>Course (Optional)</label>
+      <select id="m-course">
+        <option value="General">General Inquiry</option>
         <option value="Mathematics & Science">Mathematics & Science</option>
         <option value="Computer Science & IT">Computer Science & IT</option>
         <option value="English Language">English Language</option>
         <option value="Biology & Chemistry">Biology & Chemistry</option>
         <option value="Business & Economics">Business & Economics</option>
-        <option value="Entry Test Prep">Entry Test Prep</option>
+        <option value="Entry Test Prep">Entry Test Prep (MDCAT/ECAT)</option>
       </select>
-      <button class="btn-primary" id="formSubmitBtn" onclick="submitForm()">Book Free Trial →</button>
+
+      <!-- Submit aur Cancel buttons -->
+      <div class="modal-btns">
+        <button class="btn-primary" id="modalSubmitBtn" onclick="submitEnroll()">Book Free Trial →</button>
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+
+      <!-- Success/Error message yahan dikhega -->
+      <div class="form-msg" id="modal-msg"></div>
     </div>
-    <div class="form-msg" id="form-msg"></div>
-    <p style="font-size:0.78rem;color:var(--muted);margin-top:1.2rem;">
-      📍 Future Frontier Center &nbsp;·&nbsp; 📞 0300-0000000 &nbsp;·&nbsp; No obligation. First class is free.
-    </p>
   </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">FUTURE FRONTIER</div>
-  <div class="footer-links">
-    <a href="#courses">Courses</a>
-    <a href="#why">About</a>
-    <a href="#contact">Enroll</a>
-    <a href="/admin.html">Admin</a>
-  </div>
-  <div>© 2025 Future Frontier Education Center. All rights reserved.</div>
-</footer>
 
-<script>
-// ── Stars ─────────────────────────────────────────────────
-const starsEl = document.getElementById('stars');
-for (let i = 0; i < 160; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  const size = Math.random() * 2.5 + 0.5;
-  s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${(Math.random()*3+1.5).toFixed(1)}s;opacity:${Math.random()*0.6+0.2};`;
-  starsEl.appendChild(s);
-}
+  <!-- =====================================================
+       NAVIGATION BAR
+       Logo | Links | Enroll Button
+  ====================================================== -->
+  <nav>
+    <div class="logo">FUTURE<span>FRONTIER</span></div>
 
-// ── Scroll reveal ─────────────────────────────────────────
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.course-card,.why-card,.testi-card').forEach(el => {
-  el.style.opacity='0'; el.style.transform='translateY(24px)';
-  el.style.transition='opacity 0.5s ease, transform 0.5s ease';
-  obs.observe(el);
-});
+    <ul class="nav-links">
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#why">About</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
 
-// ── Modal ─────────────────────────────────────────────────
-function openModal(course) {
-  document.getElementById('enrollModal').classList.add('open');
-  document.getElementById('modal-msg').textContent = '';
-  document.getElementById('modal-msg').className = 'form-msg';
-  if (course) document.getElementById('m-course').value = course;
-}
-function closeModal() {
-  document.getElementById('enrollModal').classList.remove('open');
-}
-document.getElementById('enrollModal').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
+    <!-- Nav ka "Enroll Now" button — modal kholta hai -->
+    <button class="nav-btn" onclick="openModal()">Enroll Now</button>
+  </nav>
 
-// ── API base URL — works both locally and on Render ───────
-const API = '';   // empty = same origin (no need to change for deployment)
 
-// ── Submit enrollment (modal) ─────────────────────────────
-async function submitEnroll() {
-  const name   = document.getElementById('m-name').value.trim();
-  const phone  = document.getElementById('m-phone').value.trim();
-  const course = document.getElementById('m-course').value;
-  const msgEl  = document.getElementById('modal-msg');
-  const btn    = document.getElementById('modalSubmitBtn');
+  <!-- =====================================================
+       HERO SECTION
+       Page par pehli cheez jo dikhti hai.
+       Badge → Heading → Description → Buttons → Stats
+  ====================================================== -->
+  <section class="hero">
 
-  if (!name || !phone) { showMsg(msgEl, 'Name aur phone zaroor bharo.', 'error'); return; }
+    <!-- Upar wala badge -->
+    <div class="hero-badge">🚀 Pakistan's #1 Futuristic Learning Center</div>
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Bheja ja raha hai...';
+    <!-- Main heading — do lines -->
+    <h1>
+      Shape Your Mind,
+      <span class="line2">Own the Future.</span>
+    </h1>
 
-  try {
-    const res  = await fetch(`${API}/api/enroll`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, course })
-    });
-    const data = await res.json();
-    if (data.ok) {
-      showMsg(msgEl, `✅ ${data.message}`, 'success');
-      document.getElementById('m-name').value  = '';
-      document.getElementById('m-phone').value = '';
-      setTimeout(closeModal, 2500);
-    } else {
-      showMsg(msgEl, data.message, 'error');
+    <!-- Description -->
+    <p>Future Frontier is where ambitious students discover the knowledge and skills to lead tomorrow. World-class teaching. Cutting-edge curriculum. Limitless potential.</p>
+
+    <!-- Do buttons -->
+    <div class="hero-btns">
+      <a href="#courses" class="btn-primary">Explore Courses</a>
+      <button class="btn-secondary" onclick="openModal()">Book Free Trial</button>
+    </div>
+
+    <!-- Statistics strip — 4 numbers -->
+    <div class="stats">
+      <div class="stat"><div class="stat-num">1,200+</div><div class="stat-label">Students</div></div>
+      <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Pass Rate</div></div>
+      <div class="stat"><div class="stat-num">25+</div><div class="stat-label">Expert Teachers</div></div>
+      <div class="stat"><div class="stat-num">8 Yrs</div><div class="stat-label">Experience</div></div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       COURSES SECTION
+       6 course cards — click karne par modal khulta hai
+       aur woh course pre-select ho jata hai
+  ====================================================== -->
+  <section id="courses">
+    <div class="container">
+
+      <!-- Section heading -->
+      <div class="section-header">
+        <span class="section-tag">// What We Teach</span>
+        <h2>Our Programs</h2>
+        <p>From foundational subjects to advanced specializations — we prepare students for a world that doesn't exist yet.</p>
+      </div>
+
+      <!-- 6 Course Cards -->
+      <div class="courses-grid">
+
+        <!-- Card 1: Math & Science -->
+        <div class="course-card" onclick="openModal('Mathematics & Science')">
+          <div class="course-icon">🔢</div>
+          <h3>Mathematics & Science</h3>
+          <p>From basic algebra to calculus and physics — taught with clarity, depth, and real-world application.</p>
+          <span class="course-tag tag-neon">Matric · FSc</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+        <!-- Card 2: Computer Science -->
+        <div class="course-card" onclick="openModal('Computer Science & IT')">
+          <div class="course-icon">💻</div>
+          <h3>Computer Science & IT</h3>
+          <p>Programming, web development, and digital literacy. Prepare for the jobs of the future, starting today.</p>
+          <span class="course-tag tag-purple">All Levels</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+        <!-- Card 3: English -->
+        <div class="course-card" onclick="openModal('English Language')">
+          <div class="course-icon">📖</div>
+          <h3>English Language Mastery</h3>
+          <p>Grammar, comprehension, writing, and spoken English — communication skills that open every door.</p>
+          <span class="course-tag tag-neon">Beginner–Advanced</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+        <!-- Card 4: Biology & Chemistry -->
+        <div class="course-card" onclick="openModal('Biology & Chemistry')">
+          <div class="course-icon">🧬</div>
+          <h3>Biology & Chemistry</h3>
+          <p>Concept-based learning with lab practice that builds real understanding — not just exam tricks.</p>
+          <span class="course-tag tag-gold">Pre-Medical</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+        <!-- Card 5: Business -->
+        <div class="course-card" onclick="openModal('Business & Economics')">
+          <div class="course-icon">📊</div>
+          <h3>Business & Economics</h3>
+          <p>Accounts, economics, and commerce fundamentals for students aiming for a career in business.</p>
+          <span class="course-tag tag-purple">Commerce</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+        <!-- Card 6: Entry Test Prep -->
+        <div class="course-card" onclick="openModal('Entry Test Prep')">
+          <div class="course-icon">🎯</div>
+          <h3>Entry Test Preparation</h3>
+          <p>MDCAT, ECAT, and university entry test prep with proven strategies, mock tests, and expert guidance.</p>
+          <span class="course-tag tag-gold">Intensive</span><br/>
+          <button class="enroll-btn">+ Enroll in this course</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       WHY US SECTION — "Built Different"
+       4 points: Faculty, Small Batches, Tracking, Methods
+  ====================================================== -->
+  <section id="why" class="why-section">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-tag">// Why Future Frontier</span>
+        <h2>Built Different</h2>
+        <p>We don't just teach — we transform. Here's what sets us apart.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-num">01</div>
+          <h3>Expert Faculty</h3>
+          <p>Each teacher is rigorously selected — qualified, experienced, and passionate about student success.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-num">02</div>
+          <h3>Small Batch Sizes</h3>
+          <p>Maximum attention for every student. No getting lost in a crowd — every question gets answered.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-num">03</div>
+          <h3>Progress Tracking</h3>
+          <p>Regular assessments and detailed parent reports so you always know exactly where your child stands.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-num">04</div>
+          <h3>Modern Methods</h3>
+          <p>Digital tools, visual learning, and concept-based teaching that makes even hard topics feel simple.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       TESTIMONIALS SECTION — "Student Stories"
+       3 student reviews aur unke names/roles
+  ====================================================== -->
+  <section id="testimonials">
+    <div class="container">
+
+      <div class="section-header">
+        <span class="section-tag">// Student Stories</span>
+        <h2>What Our Students Say</h2>
+      </div>
+
+      <div class="testimonials-grid">
+
+        <!-- Review 1: Ahmed Khan -->
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"Future Frontier ne meri poori zindagi badal di. Pehle maths se darta tha, ab ECAT mein 90% aaya. Shukria!"</p>
+          <div class="testi-author">
+            <div class="avatar">AK</div>
+            <div>
+              <span>Ahmed Khan</span>
+              <small>ECAT – Engineering Student</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 2: Sana Raza -->
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"The teachers here genuinely care. I failed twice before joining — after 3 months, I topped my class in Biology."</p>
+          <div class="testi-author">
+            <div class="avatar">SR</div>
+            <div>
+              <span>Sana Raza</span>
+              <small>MDCAT – Medical Aspirant</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Review 3: Bilal Mirza -->
+        <div class="testi-card">
+          <div class="stars">★★★★★</div>
+          <p>"Computer Science ka course itna practical tha ke mujhe first year mein hi freelancing milne lagi. Amazing!"</p>
+          <div class="testi-author">
+            <div class="avatar">BM</div>
+            <div>
+              <span>Bilal Mirza</span>
+              <small>IT Course Graduate</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       CTA / ENROLL SECTION — "Start Your Journey"
+       Main enrollment form — name, phone, course, submit
+  ====================================================== -->
+  <section id="contact" class="cta-section">
+    <div class="cta-box">
+      <span class="section-tag">// Start Your Journey</span>
+      <h2>Enroll at Future Frontier</h2>
+      <p>Seats are limited. Secure your place today and take the first step toward a brighter future.</p>
+
+      <!-- Enrollment form fields -->
+      <div class="enroll-form">
+        <input type="text"  id="f-name"   placeholder="Your Name" />
+        <input type="tel"   id="f-phone"  placeholder="Phone Number" />
+        <select id="f-course">
+          <option value="General">Select Course</option>
+          <option value="Mathematics & Science">Mathematics & Science</option>
+          <option value="Computer Science & IT">Computer Science & IT</option>
+          <option value="English Language">English Language</option>
+          <option value="Biology & Chemistry">Biology & Chemistry</option>
+          <option value="Business & Economics">Business & Economics</option>
+          <option value="Entry Test Prep">Entry Test Prep</option>
+        </select>
+        <!-- Submit button — submitForm() call karta hai -->
+        <button class="btn-primary" id="formSubmitBtn" onclick="submitForm()">Book Free Trial →</button>
+      </div>
+
+      <!-- Form message area (success/error) -->
+      <div class="form-msg" id="form-msg"></div>
+
+      <!-- Contact info -->
+      <p style="font-size:0.78rem;color:var(--muted);margin-top:1.2rem;">
+        📍 Future Frontier Center &nbsp;·&nbsp; 📞 0300-0000000 &nbsp;·&nbsp; No obligation. First class is free.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       FOOTER
+       Logo | Links | Copyright text
+  ====================================================== -->
+  <footer>
+    <div class="footer-logo">FUTURE FRONTIER</div>
+
+    <div class="footer-links">
+      <a href="#courses">Courses</a>
+      <a href="#why">About</a>
+      <a href="#contact">Enroll</a>
+      <a href="/admin.html">Admin</a>  <!-- Admin panel ka link -->
+    </div>
+
+    <div>© 2025 Future Frontier Education Center. All rights reserved.</div>
+  </footer>
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+  <script>
+
+    // ── STARS GENERATION ──────────────────────────────────
+    // JavaScript se 160 random dots banaye jaate hain
+    // aur #stars div mein daale jaate hain
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 160; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 0.5; // 0.5px se 3px tak random size
+      s.style.cssText = `
+        width:${size}px;
+        height:${size}px;
+        left:${Math.random() * 100}%;
+        top:${Math.random() * 100}%;
+        --dur:${(Math.random() * 3 + 1.5).toFixed(1)}s;
+        opacity:${Math.random() * 0.6 + 0.2};
+      `;
+      starsEl.appendChild(s);
     }
-  } catch {
-    showMsg(msgEl, '❌ Network error. Server se rabta nahi.', 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = 'Book Free Trial →';
-  }
-}
 
-// ── Submit enrollment (main form) ─────────────────────────
-async function submitForm() {
-  const name   = document.getElementById('f-name').value.trim();
-  const phone  = document.getElementById('f-phone').value.trim();
-  const course = document.getElementById('f-course').value;
-  const msgEl  = document.getElementById('form-msg');
-  const btn    = document.getElementById('formSubmitBtn');
+    // ── SCROLL REVEAL ANIMATION ───────────────────────────
+    // Cards page par aate waqt fade-in aur upar se neeche aate hain
+    // IntersectionObserver yeh detect karta hai ke card screen par
+    // aa gaya hai ya nahi
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity    = '1';
+          e.target.style.transform  = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 }); // 10% visible hone par trigger
 
-  if (!name || !phone) { showMsg(msgEl, 'Name aur phone zaroor bharo.', 'error'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Bheja ja raha hai...';
-
-  try {
-    const res  = await fetch(`${API}/api/enroll`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, course })
+    // Sab course, why aur testimonial cards ko observe karna
+    document.querySelectorAll('.course-card, .why-card, .testi-card').forEach(el => {
+      el.style.opacity    = '0';           // Pehle invisible
+      el.style.transform  = 'translateY(24px)'; // Thoda neeche
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      obs.observe(el);
     });
-    const data = await res.json();
-    showMsg(msgEl, data.ok ? `✅ ${data.message}` : data.message, data.ok ? 'success' : 'error');
-    if (data.ok) { document.getElementById('f-name').value=''; document.getElementById('f-phone').value=''; }
-  } catch {
-    showMsg(msgEl, '❌ Network error. Server se rabta nahi.', 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = 'Book Free Trial →';
-  }
-}
 
-function showMsg(el, text, type) {
-  el.textContent = text;
-  el.className   = `form-msg ${type}`;
-}
-</script>
+    // ── MODAL FUNCTIONS ───────────────────────────────────
+
+    // Modal kholna — optional course parameter bhi accept karta hai
+    // Agar course pass kiya gaya hai toh dropdown mein pre-select karta hai
+    function openModal(course) {
+      document.getElementById('enrollModal').classList.add('open');
+      // Pichli message saaf karna
+      document.getElementById('modal-msg').textContent = '';
+      document.getElementById('modal-msg').className   = 'form-msg';
+      // Agar course diya gaya hai toh select karna
+      if (course) document.getElementById('m-course').value = course;
+    }
+
+    // Modal band karna
+    function closeModal() {
+      document.getElementById('enrollModal').classList.remove('open');
+    }
+
+    // Bahar (overlay) par click karne par modal band karna
+    document.getElementById('enrollModal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    // ── API BASE URL ──────────────────────────────────────
+    // Khali string = Same domain par request jayegi
+    // Locally bhi kaam karta hai aur Render deploy par bhi
+    const API = '';
+
+    // ── MODAL ENROLLMENT SUBMIT ───────────────────────────
+    // Modal form ka "Book Free Trial" button click hone par
+    async function submitEnroll() {
+      // Form values lena
+      const name   = document.getElementById('m-name').value.trim();
+      const phone  = document.getElementById('m-phone').value.trim();
+      const course = document.getElementById('m-course').value;
+      const msgEl  = document.getElementById('modal-msg');
+      const btn    = document.getElementById('modalSubmitBtn');
+
+      // Validation — naam aur phone zaroor chahiye
+      if (!name || !phone) {
+        showMsg(msgEl, 'Name aur phone zaroor bharo.', 'error');
+        return;
+      }
+
+      // Button disable karna aur spinner dikhana
+      btn.disabled    = true;
+      btn.innerHTML   = '<span class="spinner"></span>Bheja ja raha hai...';
+
+      try {
+        // API ko POST request bhejna
+        const res  = await fetch(`${API}/api/enroll`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ name, phone, course })
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+          // Kamyabi par success message aur form clear karna
+          showMsg(msgEl, `✅ ${data.message}`, 'success');
+          document.getElementById('m-name').value  = '';
+          document.getElementById('m-phone').value = '';
+          // 2.5 second baad modal band karna
+          setTimeout(closeModal, 2500);
+        } else {
+          showMsg(msgEl, data.message, 'error');
+        }
+      } catch {
+        // Network error
+        showMsg(msgEl, '❌ Network error. Server se rabta nahi.', 'error');
+      } finally {
+        // Button wapas enable karna
+        btn.disabled  = false;
+        btn.innerHTML = 'Book Free Trial →';
+      }
+    }
+
+    // ── MAIN FORM SUBMIT ──────────────────────────────────
+    // Neeche wale CTA section ka "Book Free Trial" button
+    async function submitForm() {
+      const name   = document.getElementById('f-name').value.trim();
+      const phone  = document.getElementById('f-phone').value.trim();
+      const course = document.getElementById('f-course').value;
+      const msgEl  = document.getElementById('form-msg');
+      const btn    = document.getElementById('formSubmitBtn');
+
+      // Validation
+      if (!name || !phone) {
+        showMsg(msgEl, 'Name aur phone zaroor bharo.', 'error');
+        return;
+      }
+
+      // Loading state
+      btn.disabled  = true;
+      btn.innerHTML = '<span class="spinner"></span>Bheja ja raha hai...';
+
+      try {
+        const res  = await fetch(`${API}/api/enroll`, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ name, phone, course })
+        });
+        const data = await res.json();
+
+        // Message dikhana — success ya error
+        showMsg(msgEl, data.ok ? `✅ ${data.message}` : data.message,
+                       data.ok ? 'success' : 'error');
+
+        // Success par form saaf karna
+        if (data.ok) {
+          document.getElementById('f-name').value  = '';
+          document.getElementById('f-phone').value = '';
+        }
+      } catch {
+        showMsg(msgEl, '❌ Network error. Server se rabta nahi.', 'error');
+      } finally {
+        btn.disabled  = false;
+        btn.innerHTML = 'Book Free Trial →';
+      }
+    }
+
+    // ── HELPER: MESSAGE DIKHANA ───────────────────────────
+    // el = message element, text = content, type = 'success' ya 'error'
+    function showMsg(el, text, type) {
+      el.textContent = text;
+      el.className   = `form-msg ${type}`;
+    }
+
+  </script>
 </body>
 </html>
