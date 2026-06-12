@@ -56,7 +56,7 @@ app.post('/api/enroll', async (req, res) => {
 
 // ── ADMIN - List Enrollments ─────────────────────────────
 app.get('/api/admin/enrollments', async (req, res) => {
-  const secret = process.env.ADMIN_SECRET || 'futurefrontier123';
+  const secret = process.env.ADMIN_SECRET || 'saimownerofTFF303';
   if (req.query.secret !== secret) {
     return res.status(401).json({ ok: false, message: 'Unauthorized' });
   }
@@ -66,7 +66,7 @@ app.get('/api/admin/enrollments', async (req, res) => {
 
 // ── ADMIN - Delete Enrollment ────────────────────────────
 app.delete('/api/admin/enrollments/:id', async (req, res) => {
-  const secret = process.env.ADMIN_SECRET || 'futurefrontier123';
+  const secret = process.env.ADMIN_SECRET || 'saimownerofTFF303';
   if (req.query.secret !== secret) {
     return res.status(401).json({ ok: false, message: 'Unauthorized' });
   }
