@@ -9,7 +9,7 @@
   ====================================================== -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Future Frontier – Education Center</title>
+  <title>The Future Frontier Academy</title>
 
   <!-- =====================================================
        GOOGLE FONTS — Special fonts load karna
@@ -27,14 +27,14 @@
     ====================================================== */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --neon: #00f0ff;       /* Roshan cyan color */
-      --neon2: #7b5cfa;      /* Purple color */
-      --dark: #050a14;       /* Sabse gehri background */
-      --dark2: #0a1628;      /* Thodi halki dark background */
-      --dark3: #0f2040;      /* Medium dark background */
-      --text: #e8f4ff;       /* Safed numaya text */
-      --muted: #7a9abf;      /* Dheema text (descriptions) */
-      --accent: #f0c040;     /* Golden/yellow accent color */
+      --neon: #1ecfb0;       /* Logo ka teal color (THE box) */
+      --neon2: #f0a500;      /* Logo ka golden color (FUTURE box) */
+      --dark: #04100d;       /* Gehri teal-black background */
+      --dark2: #071a14;      /* Thodi halki dark teal background */
+      --dark3: #0a2a1e;      /* Medium dark teal */
+      --text: #e8fff8;       /* Halka teal-white text */
+      --muted: #6aaa96;      /* Dheema teal text (descriptions) */
+      --accent: #f0a500;     /* Logo ka golden accent */
     }
 
     /* =====================================================
@@ -56,17 +56,15 @@
        z-index: 0 = Sab se peeche rehna
        radial-gradient = Neele se kale background ki gradient
     ====================================================== */
+    /* TFF Constellation Canvas — JavaScript se handle hoga */
     #stars {
       position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background: radial-gradient(ellipse at 50% 0%, #0a1e3a 0%, #050a14 70%);
+      /* Logo ke teal color se match karta dark gradient */
+      background: radial-gradient(ellipse at 50% 0%, #061f18 0%, #04100d 70%);
     }
-    /* Har ek star (chhota dot) ka style */
-    .star {
-      position: absolute; border-radius: 50%; background: white;
-      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    #tff-canvas {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
     }
-    /* Stars ki flickering animation */
-    @keyframes twinkle { from { opacity: 0.2; } to { opacity: 1; } }
 
     /* =====================================================
        GRID BACKGROUND
@@ -335,9 +333,8 @@
     .why-num {
       font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900;
       background: linear-gradient(135deg, var(--neon), var(--neon2));
-        background-clip: text;
-        -webkit-background-clip: text; /* Safari/older browsers */
-        -webkit-text-fill-color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
     }
     .why-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
@@ -527,7 +524,10 @@
        2. .grid-bg   = CSS se bani cyan grid lines
        3. .scanline  = CRT effect overlay
   ====================================================== -->
+  <!-- Background gradient div -->
   <div id="stars"></div>
+  <!-- TFF Constellation Canvas — yahan sab kuch draw hoga -->
+  <canvas id="tff-canvas"></canvas>
   <div class="grid-bg"></div>
   <div class="scanline"></div>
 
@@ -584,7 +584,7 @@
        Logo | Links | Enroll Button
   ====================================================== -->
   <nav>
-    <div class="logo">FUTURE<span>FRONTIER</span></div>
+    <div class="logo">THE <span style="color:var(--neon2)">FUTURE</span> <span style="color:var(--neon)">FRONTIER</span> <span style="font-size:0.7rem; color:var(--accent); letter-spacing:3px;">ACADEMY</span></div>
 
     <ul class="nav-links">
       <li><a href="#courses">Courses</a></li>
@@ -606,7 +606,7 @@
   <section class="hero">
 
     <!-- Upar wala badge -->
-    <div class="hero-badge">🚀 Pakistan's #1 Futuristic Learning Center</div>
+    <div class="hero-badge">🎓 The Future Frontier Academy — Pakistan</div>
 
     <!-- Main heading — do lines -->
     <h1>
@@ -851,7 +851,7 @@
        Logo | Links | Copyright text
   ====================================================== -->
   <footer>
-    <div class="footer-logo">FUTURE FRONTIER</div>
+    <div class="footer-logo">THE FUTURE FRONTIER ACADEMY</div>
 
     <div class="footer-links">
       <a href="#courses">Courses</a>
@@ -860,7 +860,7 @@
       <a href="/admin.html">Admin</a>  <!-- Admin panel ka link -->
     </div>
 
-    <div>© 2025 Future Frontier Education Center. All rights reserved.</div>
+    <div>© 2025 The Future Frontier Academy. All rights reserved.</div>
   </footer>
 
 
@@ -869,24 +869,237 @@
   ====================================================== -->
   <script>
 
-    // ── STARS GENERATION ──────────────────────────────────
-    // JavaScript se 160 random dots banaye jaate hain
-    // aur #stars div mein daale jaate hain
-    const starsEl = document.getElementById('stars');
-    for (let i = 0; i < 160; i++) {
-      const s = document.createElement('div');
-      s.className = 'star';
-      const size = Math.random() * 2.5 + 0.5; // 0.5px se 3px tak random size
-      s.style.cssText = `
-        width:${size}px;
-        height:${size}px;
-        left:${Math.random() * 100}%;
-        top:${Math.random() * 100}%;
-        --dur:${(Math.random() * 3 + 1.5).toFixed(1)}s;
-        opacity:${Math.random() * 0.6 + 0.2};
-      `;
-      starsEl.appendChild(s);
+    // ── CANVAS SETUP ──────────────────────────────────────
+    const canvas = document.getElementById('tff-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
+    resize();
+    window.addEventListener('resize', () => { resize(); buildTFF(); });
+
+    // ── TFF LETTER SHAPES (relative 0-1 coordinates) ─────
+    const T_pts = [
+      [0,0],[1,0],       // Top horizontal bar
+      [0.5,0],[0.5,1]    // Vertical stem
+    ];
+    const F_pts = [
+      [0,0],[1,0],       // Top bar
+      [0,0],[0,1],       // Left vertical
+      [0,0.45],[0.8,0.45] // Middle bar
+    ];
+
+    // ── TFF STARS aur SEGMENTS arrays ────────────────────
+    let tffStars    = []; // Sirf TFF ke corner stars
+    let tffSegments = []; // TFF ki lines
+    let bgStars     = []; // Freely moving background stars
+
+    // ── BUILD TFF SHAPE ───────────────────────────────────
+    function buildTFF() {
+      const W = canvas.width;
+      const H = canvas.height;
+
+      const lh     = H * 0.18;
+      const lw     = lh * 0.6;
+      const gap    = lw * 0.55;
+      const totalW = lw * 3 + gap * 2;
+      const startX = (W - totalW) / 2;
+      const startY = H * 0.38;
+
+      const origins = [
+        { x: startX,              y: startY },
+        { x: startX + lw + gap,   y: startY },
+        { x: startX + lw*2+gap*2, y: startY },
+      ];
+
+      tffStars    = [];
+      tffSegments = [];
+
+      [T_pts, F_pts, F_pts].forEach((def, li) => {
+        const ox = origins[li].x;
+        const oy = origins[li].y;
+        const local = [];
+
+        def.forEach(([rx, ry]) => {
+          const px = ox + rx * lw;
+          const py = oy + ry * lh;
+          const dup = local.find(p => Math.abs(p.bx - px) < 2 && Math.abs(p.by - py) < 2);
+          if (!dup) {
+            const isTeal = Math.random() > 0.5;
+            const s = {
+              // bx, by = base position (TFF ka fixed corner)
+              bx: px, by: py,
+              // x, y = current draw position (thoda hilta)
+              x: px,  y: py,
+              r: Math.random() * 1.8 + 1.8,
+              isTeal,
+              // Pulse timing — glow breathe karta hai
+              pulseOffset: Math.random() * Math.PI * 2,
+              pulseSpeed:  Math.random() * 0.04 + 0.02,
+              // Micro-float — corners thoda thoda hilte hain
+              floatR:   Math.random() * 4 + 2,
+              floatSpd: Math.random() * 0.006 + 0.003,
+              floatOff: Math.random() * Math.PI * 2,
+            };
+            tffStars.push(s);
+            local.push(s);
+          }
+        });
+
+        // Segments banana
+        for (let i = 0; i < def.length; i += 2) {
+          const p1x = ox + def[i][0]   * lw, p1y = oy + def[i][1]   * lh;
+          const p2x = ox + def[i+1][0] * lw, p2y = oy + def[i+1][1] * lh;
+          const s1  = tffStars.find(s => Math.abs(s.bx-p1x)<2 && Math.abs(s.by-p1y)<2);
+          const s2  = tffStars.find(s => Math.abs(s.bx-p2x)<2 && Math.abs(s.by-p2y)<2);
+          if (s1 && s2) tffSegments.push({ s1, s2 });
+        }
+      });
+
+      // ── BACKGROUND STARS — freely moving ─────────────
+      bgStars = [];
+      for (let i = 0; i < 180; i++) {
+        // Har star ko random speed aur direction dena
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 0.3 + 0.05; // pixels per frame
+        bgStars.push({
+          x:    Math.random() * W,
+          y:    Math.random() * H,
+          vx:   Math.cos(angle) * speed,  // X velocity
+          vy:   Math.sin(angle) * speed,  // Y velocity
+          r:    Math.random() * 1.3 + 0.3,
+          // Color — kuch teal, kuch golden, kuch white
+          type: Math.random() < 0.4 ? 'teal' : Math.random() < 0.6 ? 'gold' : 'white',
+          baseOpacity: Math.random() * 0.5 + 0.2,
+          twinkleOff:  Math.random() * Math.PI * 2,
+          twinkleSpd:  Math.random() * 0.03 + 0.01,
+        });
+      }
+    }
+
+    buildTFF();
+
+    // ── GLOW HELPER — soft radial glow draw karna ─────────
+    function drawGlow(x, y, r, color, alpha) {
+      const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0,   `rgba(${color}, ${alpha})`);
+      g.addColorStop(0.4, `rgba(${color}, ${alpha * 0.5})`);
+      g.addColorStop(1,   `rgba(${color}, 0)`);
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+    }
+
+    // ── MAIN ANIMATION LOOP ───────────────────────────────
+    let t = 0;
+    const W_ref = () => canvas.width;
+    const H_ref = () => canvas.height;
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      t += 0.016;
+
+      // ── 1. BACKGROUND STARS — move karte hain ──────────
+      bgStars.forEach(s => {
+        // Move karna
+        s.x += s.vx;
+        s.y += s.vy;
+
+        // Screen ke bahar jaen toh doosri taraf se wapas aana
+        if (s.x < -5)              s.x = canvas.width  + 5;
+        if (s.x > canvas.width+5)  s.x = -5;
+        if (s.y < -5)              s.y = canvas.height + 5;
+        if (s.y > canvas.height+5) s.y = -5;
+
+        // Twinkling
+        const tw  = 0.5 + 0.5 * Math.sin(t * s.twinkleSpd * 60 + s.twinkleOff);
+        const opc = s.baseOpacity * (0.5 + 0.5 * tw);
+
+        // Color ke hisaab se draw karna
+        if (s.type === 'teal') {
+          // Teal star with soft glow
+          drawGlow(s.x, s.y, s.r * 4, '30,207,176', opc * 0.25);
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(140,255,220,${opc})`;
+          ctx.fill();
+        } else if (s.type === 'gold') {
+          // Golden star with soft glow
+          drawGlow(s.x, s.y, s.r * 4, '240,165,0', opc * 0.22);
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,220,100,${opc})`;
+          ctx.fill();
+        } else {
+          // Plain white star
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${opc * 0.7})`;
+          ctx.fill();
+        }
+      });
+
+      // ── 2. TFF CONSTELLATION LINES ─────────────────────
+      tffSegments.forEach(({ s1, s2 }) => {
+        // Line ki pulse — slowly glow up aur down
+        const linePulse = 0.5 + 0.5 * Math.sin(t * 1.2 + s1.pulseOffset);
+        const lineOpc   = 0.25 + 0.35 * linePulse;
+
+        const grad = ctx.createLinearGradient(s1.x, s1.y, s2.x, s2.y);
+        grad.addColorStop(0,   `rgba(30,207,176, ${lineOpc})`);
+        grad.addColorStop(0.5, `rgba(240,165,0,  ${lineOpc * 1.8})`);
+        grad.addColorStop(1,   `rgba(30,207,176, ${lineOpc})`);
+
+        // Glowing line — do baar draw karna (thick glow + thin bright)
+        ctx.beginPath();
+        ctx.moveTo(s1.x, s1.y);
+        ctx.lineTo(s2.x, s2.y);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = 2.5;
+        ctx.globalAlpha = 0.18;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(s1.x, s1.y);
+        ctx.lineTo(s2.x, s2.y);
+        ctx.lineWidth   = 1;
+        ctx.globalAlpha = 1;
+        ctx.stroke();
+
+        ctx.globalAlpha = 1;
+      });
+
+      // ── 3. TFF CORNER STARS — glowing pulse ────────────
+      tffStars.forEach(s => {
+        // Micro-float — corners thoda hilte hain apni jagah se
+        s.x = s.bx + Math.sin(t * s.floatSpd * 60 + s.floatOff) * s.floatR;
+        s.y = s.by + Math.cos(t * s.floatSpd * 45 + s.floatOff) * s.floatR * 0.7;
+
+        // Pulsing brightness
+        const pulse    = 0.5 + 0.5 * Math.sin(t * s.pulseSpeed * 60 + s.pulseOffset);
+        const bright   = 0.7 + 0.3 * pulse;
+        const col      = s.isTeal ? '30,207,176' : '240,165,0';
+        const coreCol  = s.isTeal ? '180,255,230' : '255,225,120';
+
+        // Layer 1 — sabse bahari badi glow
+        drawGlow(s.x, s.y, s.r * 9, col, 0.07 * bright);
+        // Layer 2 — medium glow
+        drawGlow(s.x, s.y, s.r * 5, col, 0.18 * bright);
+        // Layer 3 — tight inner glow
+        drawGlow(s.x, s.y, s.r * 2.5, col, 0.5 * bright);
+        // Core — bright white dot
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${coreCol}, ${0.9 * bright})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+    animate();
 
     // ── SCROLL REVEAL ANIMATION ───────────────────────────
     // Cards page par aate waqt fade-in aur upar se neeche aate hain
