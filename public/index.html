@@ -84,42 +84,59 @@
        backdrop-filter: blur = Peeche wala content blur hona
        border-bottom = Neechey cyan ki patli line
     ====================================================== */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1rem 4rem;
-      background: rgba(5,10,20,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,240,255,0.12);
-    }
-    /* Logo ka style — Orbitron font mein FUTUREFRONTIER */
-    .logo {
-      font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.25rem;
-      color: var(--neon); letter-spacing: 2px;
-      text-shadow: 0 0 20px rgba(0,240,255,0.5);
-    }
-    /* Logo ke andar FRONTIER part — golden color mein */
-    .logo span { color: var(--accent); }
+    /* Hamburger button */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  background: var(--neon);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
 
-    /* Nav links list — horizontal mein dikhana */
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none; font-size: 0.85rem;
-      letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s;
-    }
-    /* Hover par cyan ho jaana */
-    .nav-links a:hover { color: var(--neon); }
+/* Mobile mein hide karo desktop enroll */
+.mobile-enroll { display: none; }
 
-    /* "Enroll Now" button nav mein */
-    .nav-btn {
-      background: transparent; border: 1px solid var(--neon); color: var(--neon);
-      padding: 0.5rem 1.4rem; border-radius: 4px;
-      font-family: 'Exo 2', sans-serif; font-size: 0.85rem;
-      letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
-      text-transform: uppercase;
-    }
-    /* Hover par background cyan aur text dark ho jaana */
-    .nav-btn:hover { background: var(--neon); color: var(--dark); }
+/* Mobile responsive */
+@media (max-width: 768px) {
+  nav {
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .desktop-enroll {
+    display: none;
+  }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    padding: 1rem 0;
+    gap: 0.5rem;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-links li a {
+    display: block;
+    padding: 0.6rem 1rem;
+  }
+  .mobile-enroll {
+    display: block;
+    padding: 0.5rem 1rem;
+  }
+}
 
     /* =====================================================
        SECTION — Sab sections ka base z-index
@@ -585,18 +602,35 @@
   ====================================================== -->
 ```html
 <nav>
-    <div class="logo">THE <span style="color:var(--neon2)">FUTURE</span> <span style="color:var(--neon)">FRONTIER</span> <span style="font-size:0.7rem; color:var(--accent); letter-spacing:3px;">ACADEMY</span></div>
+  <div class="logo">THE 
+    <span style="color:var(--neon2)">FUTURE</span>
+    <span style="color:var(--neon)">FRONTIER</span>
+    <span style="font-size:0.7rem;color:var(--accent);letter-spacing:3px;">ACADEMY</span>
+  </div>
 
-    <ul class="nav-links">
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#why">About</a></li>
-      <li><a href="#testimonials">Reviews</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+  <!-- Hamburger button (mobile pe dikhega) -->
+  <button class="hamburger" 
+          onclick="toggleMenu()" 
+          aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <!-- Nav ka "Enroll Now" button — modal kholta hai -->
-    <button class="nav-btn" onclick="openModal()">Enroll Now</button>
-  </nav>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <!-- Mobile pe Enroll button bhi yahan aayega -->
+    <li class="mobile-enroll">
+      <button class="nav-btn" onclick="openModal()">Enroll Now</button>
+    </li>
+  </ul>
+
+  <button class="nav-btn desktop-enroll" 
+          onclick="openModal()">Enroll Now</button>
+</nav>
 
 (mujhe is code ko responsive bnan hy mobile ky ly bas mobile mein ya section sahi nhi khol rahi )
 ```
@@ -1126,6 +1160,12 @@
     });
 
     // ── MODAL FUNCTIONS ───────────────────────────────────
+
+    // ⬇️ YAHAN ADD KARO — Modal functions se pehle
+    function toggleMenu() {
+    const nav = document.getElementById('navLinks');
+    nav.classList.toggle('open');
+    }
 
     // Modal kholna — optional course parameter bhi accept karta hai
     // Agar course pass kiya gaya hai toh dropdown mein pre-select karta hai
