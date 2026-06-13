@@ -78,12 +78,6 @@
       background-size: 60px 60px;
     }
 
-    /* =====================================================
-       NAVIGATION BAR
-       position: fixed = Scroll karne par bhi upar rehna
-       backdrop-filter: blur = Peeche wala content blur hona
-       border-bottom = Neechey cyan ki patli line
-    ====================================================== */
     /* Hamburger button */
 .hamburger {
   display: none;
@@ -103,7 +97,15 @@
   transition: all 0.3s;
 }
 
-/* Mobile mein hide karo desktop enroll */
+/* ⬇️ YAHI MISSING THA — Desktop pe nav links visible */
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .mobile-enroll { display: none; }
 
 /* Mobile responsive */
@@ -118,51 +120,14 @@
   .desktop-enroll {
     display: none;
   }
-  /* Desktop pe hamesha visible */
-/* Desktop pe hamesha visible */
-.nav-links {
-  display: flex;  /* none ki jagah flex likho */
-  gap: 2rem;
-  list-style: none;
-}
-
-.hamburger {
-  display: none; /* Desktop pe hamburger hide */
-}
-
-/* Mobile pe override */
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex; /* Mobile pe hamburger show */
-  }
   .nav-links {
-    display: none; /* Mobile pe pehle hide */
+    display: none;
     flex-direction: column;
     width: 100%;
+    padding: 1rem 0;
+    gap: 0.5rem;
+    list-style: none;
   }
-  .nav-links.open {
-    display: flex; /* Menu open hone par show */
-  }
-}
-
-.hamburger {
-  display: none; /* Desktop pe hamburger hide */
-}
-
-/* Mobile pe override */
-@media (max-width: 768px) {
-  .hamburger {
-    display: flex; /* Mobile pe hamburger show */
-  }
-  .nav-links {
-    display: none; /* Mobile pe pehle hide */
-    flex-direction: column;
-    width: 100%;
-  }
-  .nav-links.open {
-    display: flex; /* Menu open hone par show */
-  }
-}
   .nav-links.open {
     display: flex;
   }
@@ -175,7 +140,6 @@
     padding: 0.5rem 1rem;
   }
 }
-
     /* =====================================================
        SECTION — Sab sections ka base z-index
        Stars/grid ke upar dikhne ke liye z-index: 1
