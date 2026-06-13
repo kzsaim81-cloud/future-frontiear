@@ -119,10 +119,30 @@
     display: none;
   }
   /* Desktop pe hamesha visible */
+/* Desktop pe hamesha visible */
 .nav-links {
   display: flex;  /* none ki jagah flex likho */
   gap: 2rem;
   list-style: none;
+}
+
+.hamburger {
+  display: none; /* Desktop pe hamburger hide */
+}
+
+/* Mobile pe override */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex; /* Mobile pe hamburger show */
+  }
+  .nav-links {
+    display: none; /* Mobile pe pehle hide */
+    flex-direction: column;
+    width: 100%;
+  }
+  .nav-links.open {
+    display: flex; /* Menu open hone par show */
+  }
 }
 
 .hamburger {
