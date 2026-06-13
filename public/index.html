@@ -583,20 +583,36 @@
        NAVIGATION BAR
        Logo | Links | Enroll Button
   ====================================================== -->
-  <nav>
-    <div class="logo">THE <span style="color:var(--neon2)">FUTURE</span> <span style="color:var(--neon)">FRONTIER</span> <span style="font-size:0.7rem; color:var(--accent); letter-spacing:3px;">ACADEMY</span></div>
+<nav>
+  <div class="logo">THE 
+    <span style="color:var(--neon2)">FUTURE</span>
+    <span style="color:var(--neon)">FRONTIER</span>
+    <span style="font-size:0.7rem;color:var(--accent);letter-spacing:3px;">ACADEMY</span>
+  </div>
 
-    <ul class="nav-links">
-      <li><a href="#courses">Courses</a></li>
-      <li><a href="#why">About</a></li>
-      <li><a href="#testimonials">Reviews</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+  <!-- Hamburger button (mobile pe dikhega) -->
+  <button class="hamburger" 
+          onclick="toggleMenu()" 
+          aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <!-- Nav ka "Enroll Now" button — modal kholta hai -->
-    <button class="nav-btn" onclick="openModal()">Enroll Now</button>
-  </nav>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <!-- Mobile pe Enroll button bhi yahan aayega -->
+    <li class="mobile-enroll">
+      <button class="nav-btn" onclick="openModal()">Enroll Now</button>
+    </li>
+  </ul>
 
+  <button class="nav-btn desktop-enroll" 
+          onclick="openModal()">Enroll Now</button>
+</nav>
 
   <!-- =====================================================
        HERO SECTION
