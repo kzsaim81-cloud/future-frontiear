@@ -880,7 +880,30 @@
         <!-- Submit button — submitForm() call karta hai -->
         <button class="btn-primary" id="formSubmitBtn" onclick="submitForm()">Book Free Trial →</button>
       </div>
+      <script>
+        async function submitForm() {
+          const name = document.getElementById("f-name").value.trim();
+          const phone = document.getElementById("f-phone").value.trim();
+          const course = document.getElementById("f-course").value;
 
+          console.log("Selected Course:", course); // Testing
+
+          const res = await fetch("/api/enroll", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              name,
+              phone,
+              course
+            })
+          });
+
+          const data = await res.json();
+          console.log(data);
+          }
+      </script>
       <!-- Form message area (success/error) -->
       <div class="form-msg" id="form-msg"></div>
 
